@@ -131,6 +131,7 @@ class DiTBlock(nn.Module):
         # determine current working status
         cal_type(cache_dic, current)
 
+        #! 完全计算
         if current['type'] == 'full':  # Force Activation: Compute all tokens and save them in cache
 
             # AdaLN Modulation
@@ -165,6 +166,7 @@ class DiTBlock(nn.Module):
                 flops += B * N * mlp_hidden_dim * C * 2# Second projection
                 flops += B * N * mlp_hidden_dim * 6 # GELU activation
 
+        #! 缓存全部Attn + 部分MLP
         elif current['type'] == 'ToCa':  # Partial Computation: Compute only fresh tokens and save them in cache, no attention token computation in the final version
             
             # AdaLN Modulation
@@ -198,6 +200,7 @@ class DiTBlock(nn.Module):
                 flops += B_fresh * N_fresh * mlp_hidden_dim * C_fresh * 2 # Second projection
                 flops += B_fresh * N_fresh * mlp_hidden_dim * 6 # GELU activation
 
+        #! 全缓存
         elif current['type'] == 'FORA':
             
             # AdaLN Modulation

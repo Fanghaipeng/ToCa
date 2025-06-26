@@ -16,6 +16,7 @@ from diffusers.models import AutoencoderKL
 from download import find_model
 from models import DiT_models
 import argparse
+import os
 
 
 def main(args):
@@ -39,12 +40,12 @@ def main(args):
         num_classes=args.num_classes
     ).to(device)
     # Auto-download a pre-trained model or load a custom DiT checkpoint from train.py:
-    ckpt_path = args.ckpt or f"/root/autodl-tmp/pretrained_models/DiT/DiT-XL-2-{args.image_size}x{args.image_size}.pt"
+    ckpt_path = args.ckpt or f"/data1/fanghaipeng/checkpoints/DiT/DiT-XL-2-{args.image_size}x{args.image_size}.pt"
     state_dict = find_model(ckpt_path)
     model.load_state_dict(state_dict)
     model.eval()  # important!
     diffusion = create_diffusion(str(args.num_sampling_steps))
-    vae = AutoencoderKL.from_pretrained(f"/root/autodl-tmp/pretrained_models/stabilityai/sd-vae-ft-{args.vae}").to(device)
+    vae = AutoencoderKL.from_pretrained(f"/data1/fanghaipeng/checkpoints/stabilityai/sd-vae-ft-{args.vae}").to(device)
     #vae = AutoencoderKL.from_pretrained(f"/root/autodl-tmp/pretrained_models").to(device)
 
     # Labels to condition the model with (feel free to change):
@@ -71,6 +72,7 @@ def main(args):
     model_kwargs['ratio_scheduler']   = args.ratio_scheduler
     model_kwargs['soft_fresh_weight'] = args.soft_fresh_weight
     model_kwargs['test_FLOPs']        = args.test_FLOPs
+    model_kwargs['use_ResCa']        = args.use_ResCa
         
 
     start = torch.cuda.Event(enable_timing=True)
@@ -92,8 +94,11 @@ def main(args):
     samples, _ = samples.chunk(2, dim=0)  # Remove null class samples
     samples = vae.decode(samples / 0.18215).sample
 
-    # Save and display images:
-    save_image(samples, "sample.png", nrow=4, normalize=True, value_range=(-1, 1))
+
+    output_name = f"./samples/ResCa{args.use_ResCa}-DDIM{args.ddim_sample}.png"
+    os.makedirs(os.path.dirname(output_name), exist_ok=True)
+
+    save_image(samples, output_name, nrow=4, normalize=True, value_range=(-1, 1))
 
 
 if __name__ == "__main__":
@@ -118,6 +123,9 @@ if __name__ == "__main__":
                         help="soft weight for updating the stale tokens by adding extra scores.")
     parser.add_argument("--test-FLOPs", action="store_true", default=False)
     #parser.add_argument("--merge-weight", type=float, default=0.0) # never used in the paper, just for exploration
+
+    #! New for ResCa
+    parser.add_argument("--use-ResCa", action="store_true", default=False, help="Use ResCa for cache update.") 
 
     args = parser.parse_args()
     main(args)

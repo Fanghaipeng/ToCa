@@ -24,7 +24,6 @@ import numpy as np
 import math
 import argparse
 
-
 def create_npz_from_sample_folder(sample_dir, num=50_000):
     """
     Builds a single .npz file from a folder of .png samples.
@@ -71,23 +70,23 @@ def main(args):
         num_classes=args.num_classes
     ).to(device)
     # Auto-download a pre-trained model or load a custom DiT checkpoint from train.py:
-    ckpt_path = args.ckpt or f"/root/autodl-tmp/pretrained_models/DiT/DiT-XL-2-{args.image_size}x{args.image_size}.pt"
+    ckpt_path = args.ckpt or f"/data1/fanghaipeng/checkpoints/DiT/DiT-XL-2-{args.image_size}x{args.image_size}.pt"
     state_dict = find_model(ckpt_path)
     model.load_state_dict(state_dict)
     model.eval()  # important!
     diffusion = create_diffusion(str(args.num_sampling_steps))
-    vae = AutoencoderKL.from_pretrained(f"/root/autodl-tmp/pretrained_models/stabilityai/sd-vae-ft-{args.vae}").to(device)
-    #vae = AutoencoderKL.from_pretrained(f"/root/autodl-tmp/pretrained_models").to(device)
+    vae = AutoencoderKL.from_pretrained("stabilityai/sd-vae-ft-ema", cache_dir="/data1/fanghaipeng/checkpoints/stabilityai/sd-vae-ft-ema").to(device)
     assert args.cfg_scale >= 1.0, "In almost all cases, cfg_scale be >= 1.0"
     using_cfg = args.cfg_scale > 1.0
 
     # Create folder to save samples:
     model_string_name = args.model.replace("/", "-")
     ckpt_string_name = os.path.basename(args.ckpt).replace(".pt", "") if args.ckpt else "pretrained"
-    folder_name = f"ToCa-{model_string_name}-{ckpt_string_name}-size-{args.image_size}-vae-{args.vae}-" \
+    folder_name = f"ResCa{args.use_ResCa}-DDIM{args.ddim_sample}-{model_string_name}-size-{args.image_size}-vae-{args.vae}-" \
                   f"cfg-{args.cfg_scale}-seed-{args.global_seed}-step-{args.num_sampling_steps}-num-{args.num_fid_samples}"\
                   f"-{args.cache_type}-{args.fresh_ratio}-{args.ratio_scheduler}-{args.force_fresh}-{args.fresh_threshold}"\
                   f"-softweight-{args.soft_fresh_weight}"
+
     sample_folder_dir = f"{args.sample_dir}/{folder_name}"
     if rank == 0:
         os.makedirs(sample_folder_dir, exist_ok=True)
@@ -132,6 +131,7 @@ def main(args):
         model_kwargs['ratio_scheduler']   = args.ratio_scheduler
         model_kwargs['soft_fresh_weight'] = args.soft_fresh_weight
         model_kwargs['test_FLOPs']        = args.test_FLOPs
+        model_kwargs['use_ResCa']        = args.use_ResCa
         
 
         # Sample images:
@@ -169,7 +169,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", type=str, choices=list(DiT_models.keys()), default="DiT-XL/2")
     parser.add_argument("--vae",  type=str, choices=["ema", "mse"], default="ema")
-    parser.add_argument("--sample-dir", type=str, default="/root/autodl-tmp/samples") # Change this to your desired sample directory
+    parser.add_argument("--sample-dir", type=str, default="./samples_50k") # Change this to your desired sample directory
     parser.add_argument("--per-proc-batch-size", type=int, default=32)
     parser.add_argument("--num-fid-samples", type=int, default=50_000)
     parser.add_argument("--image-size", type=int, choices=[256, 512], default=256)
@@ -192,6 +192,9 @@ if __name__ == "__main__":
                         help="soft weight for updating the stale tokens by adding extra scores.")
     parser.add_argument("--test-FLOPs", action="store_true", default=False)
     #parser.add_argument("--merge-weight", type=float, default=0.0) # never used in the paper, just for exploration
+
+    #! New for ResCa
+    parser.add_argument("--use-ResCa", action="store_true", default=False, help="Use ResCa for cache update.") 
 
     args = parser.parse_args()
     main(args)

@@ -19,6 +19,7 @@ def cache_init(model_kwargs, num_steps):
         for j in range(28):
             cache[i][j] = {}
     cache_dic['cache_type']           = model_kwargs['cache_type']
+    cache_dic['use_ResCa']            = model_kwargs['use_ResCa']
     cache_dic['cache_index']          = cache_index
     cache_dic['cache']                = cache
     cache_dic['fresh_ratio_schedule'] = model_kwargs['ratio_scheduler']

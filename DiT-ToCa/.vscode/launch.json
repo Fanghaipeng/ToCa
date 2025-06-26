@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "调试 DiT-ToCa sample.py",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/sample.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "env": {
+        "CUDA_VISIBLE_DEVICES": "1",
+      },
+      "args": [
+        "--image-size", "256",
+        "--num-sampling-steps", "250",
+        "--cache-type", "attention",
+        "--fresh-threshold", "4",
+        "--fresh-ratio", "0.07",
+        "--ratio-scheduler", "ToCa-ddpm250",
+        "--force-fresh", "global",
+        "--soft-fresh-weight", "0.25"
+      ],
+      "justMyCode": true
+    }
+  ]
+}
