@@ -25,10 +25,10 @@ from diffusion.data.datasets import get_chunks, ASPECT_RATIO_256_TEST, ASPECT_RA
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--image_size', default=256, type=int)
-    parser.add_argument('--t5_path', default='../autodl-tmp/pretrained_models/t5_ckpts', type=str) # change to your own path
-    parser.add_argument('--tokenizer_path', default='../autodl-tmp/pretrained_models/sd-vae-ft-ema', type=str) # change to your own path
-    parser.add_argument('--txt_file', default='asset/samples.txt', type=str) # change to your own path
-    parser.add_argument('--model_path', default='../autodl-tmp/pretrained_models/PixArt-XL-2-1024x1024.pth', type=str) # change to your own path
+    parser.add_argument('--t5_path', default='/data/fanghaipeng/checkpoints/PixArt-alpha/t5_ckpts', type=str) # change to your own path
+    parser.add_argument('--tokenizer_path', default='/data/fanghaipeng/checkpoints/stabilityai/sd-vae-ft-ema', type=str) # change to your own path
+    parser.add_argument('--txt_file', default='/data1/fanghaipeng/paper/PruneCache/ToCa/COCO_caption_prompts_30k.txt', type=str) # change to your own path
+    parser.add_argument('--model_path', default='/data/fanghaipeng/checkpoints/PixArt-alpha/PixArt-XL-2-256x256.pth', type=str) # change to your own path
     parser.add_argument('--bs', default=1, type=int)
     parser.add_argument('--cfg_scale', default=4.5, type=float)
     parser.add_argument('--sampling_algo', default='dpm-solver', type=str, choices=['iddpm', 'dpm-solver', 'sa-solver'])

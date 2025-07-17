@@ -47,13 +47,10 @@ opensora/models/latte/__init__.py
 opensora/models/latte/latte.py
 opensora/models/layers/__init__.py
 opensora/models/layers/blocks.py
-opensora/models/pixart/__init__.py
 opensora/models/pixart/pixart.py
-opensora/models/pixart/pixart_sigma.py
 opensora/models/stdit/__init__.py
 opensora/models/stdit/stdit.py
 opensora/models/stdit/stdit2.py
-opensora/models/stdit/stdit3 copy.py
 opensora/models/stdit/stdit3.py
 opensora/models/text_encoder/__init__.py
 opensora/models/text_encoder/classes.py
@@ -86,11 +83,6 @@ opensora/utils/misc.py
 opensora/utils/train_utils.py
 tests/test_attn.py
 tests/test_lr_scheduler.py
-tests/test_np_torch.py
-tests/test_pos_emb.py
-tests/test_seq_parallel_attention.py
-tests/test_stdit3_sequence_parallelism.py
-tests/test_t5_shardformer.py
 tools/caption/__init__.py
 tools/caption/camera_motion_detect.py
 tools/caption/caption_gpt4.py

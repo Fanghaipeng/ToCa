@@ -27,6 +27,7 @@ def cache_init(model_kwargs, num_steps):
     cache_dic['fresh_threshold'] = model_kwargs['fresh_threshold']
     cache_dic['force_fresh'] = model_kwargs['force_fresh']
     cache_dic['soft_fresh_weight'] = model_kwargs['soft_fresh_weight']
+    cache_dic['use_ResCa'] = model_kwargs['use_ResCa']
     #cache_dic['merge_weight'] = merge_weight
     current = {}
     current['num_steps'] = num_steps

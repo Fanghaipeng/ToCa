@@ -26,10 +26,10 @@ from diffusion.data.datasets import get_chunks, ASPECT_RATIO_256_TEST, ASPECT_RA
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--image_size', default=256, type=int)
-    parser.add_argument('--t5_path', default='../autodl-tmp/pretrained_models/t5_ckpts', type=str) # change to your t5 path
-    parser.add_argument('--tokenizer_path', default='../autodl-tmp/pretrained_models/sd-vae-ft-ema', type=str) # change to your tokenizer path
-    parser.add_argument('--txt_file', default='asset/samples.txt', type=str) # change to your txt prompt file
-    parser.add_argument('--model_path', default='../autodl-tmp/pretrained_models/PixArt-XL-2-1024x1024.pth', type=str)
+    parser.add_argument('--t5_path', default='/data/fanghaipeng/checkpoints/PixArt-alpha/t5_ckpts', type=str) # change to your t5 path
+    parser.add_argument('--tokenizer_path', default='/data/fanghaipeng/checkpoints/stabilityai/sd-vae-ft-ema', type=str) # change to your tokenizer path
+    parser.add_argument('--txt_file', default='/data1/fanghaipeng/paper/PruneCache/ToCa/COCO_caption_prompts_30k.txt', type=str) # change to your txt prompt file
+    parser.add_argument('--model_path', default='/data/fanghaipeng/checkpoints/PixArt-alpha/PixArt-XL-2-256x256.pth', type=str)
     parser.add_argument('--bs', default=1, type=int)
     parser.add_argument('--cfg_scale', default=4.5, type=float)
     parser.add_argument('--sampling_algo', default='dpm-solver', type=str, choices=['iddpm', 'dpm-solver', 'sa-solver'])
@@ -43,6 +43,9 @@ def get_args():
     parser.add_argument("--force_fresh", type=str, choices=['global', 'local'], default='global')
     parser.add_argument("--fresh_threshold", type=int, default=3)
     parser.add_argument("--soft_fresh_weight", type=float, default=0.25)
+    
+    #! New for ResCa
+    parser.add_argument("--use-ResCa", action="store_true", default=False, help="Use ResCa for cache update.") 
     return parser.parse_args()
 
 
@@ -110,7 +113,8 @@ def visualize(items, bs, sample_steps, cfg_scale, device):
                                     fresh_threshold=args.fresh_threshold,
                                     force_fresh=args.force_fresh,
                                     ratio_scheduler=args.ratio_scheduler,
-                                    soft_fresh_weight=args.soft_fresh_weight)
+                                    soft_fresh_weight=args.soft_fresh_weight,
+                                    use_ResCa=args.use_ResCa)
                 diffusion = IDDPM(str(sample_steps))
                 samples = diffusion.p_sample_loop(
                     model.module.forward_with_cfg, z.shape, z, clip_denoised=False, model_kwargs=model_kwargs, progress=True,
@@ -128,7 +132,8 @@ def visualize(items, bs, sample_steps, cfg_scale, device):
                                     fresh_threshold=args.fresh_threshold,
                                     force_fresh=args.force_fresh,
                                     ratio_scheduler=args.ratio_scheduler,
-                                    soft_fresh_weight=args.soft_fresh_weight)
+                                    soft_fresh_weight=args.soft_fresh_weight,
+                                    use_ResCa=args.use_ResCa)
                 dpm_solver = DPMS(model.module.forward_with_dpmsolver,
                                   condition=caption_embs,
                                   uncondition=null_y,
@@ -152,7 +157,8 @@ def visualize(items, bs, sample_steps, cfg_scale, device):
                                     fresh_threshold=args.fresh_threshold,
                                     force_fresh=args.force_fresh,
                                     ratio_scheduler=args.ratio_scheduler,
-                                    soft_fresh_weight=args.soft_fresh_weight)
+                                    soft_fresh_weight=args.soft_fresh_weight,
+                                    use_ResCa=args.use_ResCa)
                 sa_solver = SASolverSampler(model.module.forward_with_dpmsolver, device=device)
                 samples = sa_solver.sample(
                     S=25,
@@ -221,11 +227,24 @@ if __name__ == '__main__':
 
     epoch_name = re.search(r'.*epoch_(\d+).*.pth', args.model_path).group(1) if re.search(r'.*epoch_(\d+).*.pth', args.model_path) else 'unknown'
     step_name = re.search(r'.*step_(\d+).*.pth', args.model_path).group(1) if re.search(r'.*step_(\d+).*.pth', args.model_path) else 'unknown'
-    img_save_dir = os.path.join(work_dir, 'vis')
+    img_save_dir = "/data1/fanghaipeng/paper/PruneCache/ToCa/PixArt-alpha-ToCa/samples"
     os.umask(0o000)
     os.makedirs(img_save_dir, exist_ok=True)
 
-    save_root = os.path.join(img_save_dir, f"{datetime.now().date()}_{args.dataset}_epoch{epoch_name}_step{step_name}_scale{args.cfg_scale}_step{sample_steps}_size{args.image_size}_bs{args.bs}_samp{args.sampling_algo}_seed{args.seed}")
+    if args.use_ResCa:
+        save_root = os.path.join(
+            img_save_dir,
+            f"ResCa-{args.cache_type}-{args.fresh_ratio}-{args.ratio_scheduler}-"
+            f"{args.force_fresh}-{args.fresh_threshold}-soft{args.soft_fresh_weight}-scale{args.cfg_scale}_"
+            f"{sample_steps}_{args.image_size}_bs{args.bs}_{args.sampling_algo}_seed{args.seed}"
+        )
+    else:
+        save_root = os.path.join(
+            img_save_dir,
+            f"ToCa-{args.cache_type}-{args.fresh_ratio}-{args.ratio_scheduler}-"
+            f"{args.force_fresh}-{args.fresh_threshold}-soft{args.soft_fresh_weight}-scale{args.cfg_scale}_"
+            f"{sample_steps}_{args.image_size}_bs{args.bs}_{args.sampling_algo}_seed{args.seed}"
+        )
     os.makedirs(save_root, exist_ok=True)
 
     visualize(items, args.bs, sample_steps, args.cfg_scale, device)

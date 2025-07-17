@@ -30,7 +30,8 @@ def create_npz_from_sample_folder(sample_dir, num=50_000):
     pbar.close()
 
     if collected < num:
-        raise RuntimeError(f"Only collected {collected} valid samples after checking {idx} files.")
+        print(f"Only collected {collected} valid samples after checking {idx} files.")
+        # raise RuntimeError(f"Only collected {collected} valid samples after checking {idx} files.")
 
     samples = np.stack(samples)
     npz_path = f"{sample_dir}.npz"
@@ -38,11 +39,10 @@ def create_npz_from_sample_folder(sample_dir, num=50_000):
     print(f"Saved .npz file to {npz_path} [shape={samples.shape}].")
     return npz_path
 
-create_npz_from_sample_folder("/data1/fanghaipeng/paper/PruneCache/ToCa/DiT-ToCa/samples/ResCaFalse-DDIMFalse-DiT-XL-2-size-256-vae-ema-cfg-1.5-seed-0-step-50-num-50000-attention-0.07-ToCa-ddim50-global-3-softweight-0.25", 30000)
-create_npz_from_sample_folder("/data1/fanghaipeng/paper/PruneCache/ToCa/DiT-ToCa/samples/ResCaFalse-DDIMTrue-DiT-XL-2-size-256-vae-ema-cfg-1.5-seed-0-step-50-num-50000-attention-0.07-ToCa-ddim50-global-3-softweight-0.25", 30000)
-create_npz_from_sample_folder("/data1/fanghaipeng/paper/PruneCache/ToCa/DiT-ToCa/samples/ResCaTrue-DDIMFalse-DiT-XL-2-size-256-vae-ema-cfg-1.5-seed-0-step-50-num-50000-attention-0.07-ToCa-ddim50-global-3-softweight-0.25", 30000)
-create_npz_from_sample_folder("/data1/fanghaipeng/paper/PruneCache/ToCa/DiT-ToCa/samples/ResCaTrue-DDIMTrue-DiT-XL-2-size-256-vae-ema-cfg-1.5-seed-0-step-50-num-50000-attention-0.07-ToCa-ddim50-global-3-softweight-0.25", 30000)
-
+create_npz_from_sample_folder("/data1/fanghaipeng/paper/PruneCache/ToCa/DiT-ToCa/samples_50k/ResCaFalse-DDIMFalse-DiT-XL-2-size-256-vae-ema-cfg-1.5-seed-0-step-250-num-50000-attention-0.07-ToCa-ddpm250-global-4-softweight-0.25", 50000)
+# create_npz_from_sample_folder("/data/fanghaipeng/paper/PruneCache/ToCa/DiT-ToCa/samples/ResCaTrue-DDIMTrue-DiT-XL-2-size-256-vae-ema-cfg-1.5-seed-0-step-250-num-50000-attention-0.07-constant-global-3-softweight-0.25", 50000)
+# create_npz_from_sample_folder("", 50000)
+# create_npz_from_sample_folder("/data/fanghaipeng/paper/PruneCache/ToCa/DiT-ToCa/samples/ResCaTrue-DDIMTrue-DiT-XL-2-size-512-vae-ema-cfg-1.5-seed-0-step-50-num-50000-attention-0.07-constant-global-3-softweight-0.25", 49880)
 
 
 

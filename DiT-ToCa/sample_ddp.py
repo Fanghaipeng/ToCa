@@ -70,12 +70,12 @@ def main(args):
         num_classes=args.num_classes
     ).to(device)
     # Auto-download a pre-trained model or load a custom DiT checkpoint from train.py:
-    ckpt_path = args.ckpt or f"/data1/fanghaipeng/checkpoints/DiT/DiT-XL-2-{args.image_size}x{args.image_size}.pt"
+    ckpt_path = args.ckpt or f"/data/fanghaipeng/checkpoints/DiT/DiT-XL-2-{args.image_size}x{args.image_size}.pt"
     state_dict = find_model(ckpt_path)
     model.load_state_dict(state_dict)
     model.eval()  # important!
     diffusion = create_diffusion(str(args.num_sampling_steps))
-    vae = AutoencoderKL.from_pretrained("stabilityai/sd-vae-ft-ema", cache_dir="/data1/fanghaipeng/checkpoints/stabilityai/sd-vae-ft-ema").to(device)
+    vae = AutoencoderKL.from_pretrained("stabilityai/sd-vae-ft-ema", cache_dir="/data/fanghaipeng/checkpoints/stabilityai/sd-vae-ft-ema_2").to(device)
     assert args.cfg_scale >= 1.0, "In almost all cases, cfg_scale be >= 1.0"
     using_cfg = args.cfg_scale > 1.0
 

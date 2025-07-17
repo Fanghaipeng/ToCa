@@ -1,4 +1,4 @@
-name: pixart
+name: ToCaPixart
 channels:
   - defaults
 dependencies:
@@ -43,7 +43,7 @@ dependencies:
     - contourpy==1.3.0
     - cycler==0.12.1
     - datasets==2.21.0
-    - diffusers==0.31.0.dev0
+    # - diffusers==0.31.0.dev0
     - dill==0.3.8
     - einops==0.8.0
     - exceptiongroup==1.2.2
@@ -137,8 +137,8 @@ dependencies:
     - tomli==2.0.1
     - tomlkit==0.12.0
     - torch==2.4.0
-    - torchaudio==2.1.1+cu118
-    - torchvision==0.16.1+cu118
+    # - torchaudio==2.1.1+cu118
+    # - torchvision==0.16.1+cu118
     - tqdm==4.66.5
     - transformers==4.43.4
     - triton==3.0.0

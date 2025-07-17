@@ -8,6 +8,7 @@ Project-URL: Bug Tracker, https://github.com/hpcaitech/Open-Sora/issues
 Project-URL: Examples, https://hpcaitech.github.io/Open-Sora/
 Project-URL: Documentation, https://github.com/hpcaitech/Open-Sora?tab=readme-ov-file
 Project-URL: Github, https://github.com/hpcaitech/Open-Sora
+Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Environment :: GPU :: NVIDIA CUDA
@@ -15,96 +16,11 @@ Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
 Classifier: Topic :: System :: Distributed Computing
 Requires-Python: >=3.6
 Description-Content-Type: text/markdown
-License-File: LICENSE
-Requires-Dist: colossalai>=0.4.0
-Requires-Dist: mmengine>=0.10.3
-Requires-Dist: pandas>=2.0.3
-Requires-Dist: timm==0.9.16
-Requires-Dist: rotary_embedding_torch==0.5.3
-Requires-Dist: ftfy>=6.2.0
-Requires-Dist: diffusers==0.27.2
-Requires-Dist: accelerate==0.29.2
-Requires-Dist: av>=12.0.0
-Requires-Dist: numpy<2.0.0
-Requires-Dist: gradio>=4.26.0
-Requires-Dist: spaces>=0.28.3
-Requires-Dist: ipykernel>=6.29.4
-Requires-Dist: ipywidgets>=8.1.2
-Requires-Dist: wandb>=0.17.0
-Requires-Dist: tensorboard>=2.14.0
-Requires-Dist: pandarallel>=1.6.5
-Requires-Dist: pyarrow>=16.1.0
-Requires-Dist: pre-commit>=3.5.0
-Requires-Dist: openai
 Provides-Extra: data
-Requires-Dist: gdown>=5.2.0; extra == "data"
-Requires-Dist: ninja>=1.11.1.1; extra == "data"
-Requires-Dist: shortuuid>=1.0.13; extra == "data"
-Requires-Dist: markdown2[all]; extra == "data"
-Requires-Dist: scikit-learn>=1.4.2; extra == "data"
-Requires-Dist: einops-exts>=0.0.4; extra == "data"
-Requires-Dist: decord==0.6.0; extra == "data"
-Requires-Dist: ptvsd==4.3.2; extra == "data"
-Requires-Dist: imageio-ffmpeg>=0.4.9; extra == "data"
-Requires-Dist: ffmpeg-python==0.2.0; extra == "data"
-Requires-Dist: lingua-language-detector==2.0.2; extra == "data"
-Requires-Dist: imageio>=2.34.1; extra == "data"
-Requires-Dist: setuptools==68.2.2; extra == "data"
-Requires-Dist: clip@ git+https://github.com/openai/CLIP.git ; extra == "data"
-Requires-Dist: mmcv==2.1.0; extra == "data"
-Requires-Dist: mmdet==3.1.0; extra == "data"
-Requires-Dist: mmocr==1.0.1; extra == "data"
-Requires-Dist: detectron2@ git+https://github.com/facebookresearch/detectron2.git@ff53992 ; extra == "data"
 Provides-Extra: eval
-Requires-Dist: detectron2@ git+https://github.com/facebookresearch/detectron2.git@ff53992 ; extra == "eval"
-Requires-Dist: imageio>=2.34.1; extra == "eval"
-Requires-Dist: pyiqa==0.1.10; extra == "eval"
-Requires-Dist: scikit-learn>=1.4.2; extra == "eval"
-Requires-Dist: scikit-image>=0.20.0; extra == "eval"
-Requires-Dist: lvis==0.5.3; extra == "eval"
-Requires-Dist: boto3>=1.34.113; extra == "eval"
-Requires-Dist: easydict>=1.9; extra == "eval"
-Requires-Dist: fairscale>=0.4.13; extra == "eval"
-Requires-Dist: decord==0.6.0; extra == "eval"
-Requires-Dist: pytorchvideo==0.1.5; extra == "eval"
-Requires-Dist: lpips==0.1.4; extra == "eval"
 Provides-Extra: vae
-Requires-Dist: beartype==0.18.5; extra == "vae"
-Requires-Dist: einops==0.8.0; extra == "vae"
-Requires-Dist: einops-exts==0.0.4; extra == "vae"
-Requires-Dist: opencv-python==4.9.0.80; extra == "vae"
-Requires-Dist: pillow==10.3.0; extra == "vae"
 Provides-Extra: full
-Requires-Dist: gdown>=5.2.0; extra == "full"
-Requires-Dist: ninja>=1.11.1.1; extra == "full"
-Requires-Dist: shortuuid>=1.0.13; extra == "full"
-Requires-Dist: markdown2[all]; extra == "full"
-Requires-Dist: scikit-learn>=1.4.2; extra == "full"
-Requires-Dist: einops-exts>=0.0.4; extra == "full"
-Requires-Dist: decord==0.6.0; extra == "full"
-Requires-Dist: ptvsd==4.3.2; extra == "full"
-Requires-Dist: imageio-ffmpeg>=0.4.9; extra == "full"
-Requires-Dist: ffmpeg-python==0.2.0; extra == "full"
-Requires-Dist: lingua-language-detector==2.0.2; extra == "full"
-Requires-Dist: imageio>=2.34.1; extra == "full"
-Requires-Dist: setuptools==68.2.2; extra == "full"
-Requires-Dist: clip@ git+https://github.com/openai/CLIP.git ; extra == "full"
-Requires-Dist: mmcv==2.1.0; extra == "full"
-Requires-Dist: mmdet==3.1.0; extra == "full"
-Requires-Dist: mmocr==1.0.1; extra == "full"
-Requires-Dist: detectron2@ git+https://github.com/facebookresearch/detectron2.git@ff53992 ; extra == "full"
-Requires-Dist: detectron2@ git+https://github.com/facebookresearch/detectron2.git@ff53992 ; extra == "full"
-Requires-Dist: imageio>=2.34.1; extra == "full"
-Requires-Dist: pyiqa==0.1.10; extra == "full"
-Requires-Dist: scikit-learn>=1.4.2; extra == "full"
-Requires-Dist: scikit-image>=0.20.0; extra == "full"
-Requires-Dist: lvis==0.5.3; extra == "full"
-Requires-Dist: boto3>=1.34.113; extra == "full"
-Requires-Dist: easydict>=1.9; extra == "full"
-Requires-Dist: fairscale>=0.4.13; extra == "full"
-Requires-Dist: decord==0.6.0; extra == "full"
-Requires-Dist: pytorchvideo==0.1.5; extra == "full"
-Requires-Dist: lpips==0.1.4; extra == "full"
+License-File: LICENSE
 
 <p align="center">
     <img src="./assets/readme/icon.png" width="250"/>
@@ -693,3 +609,5 @@ We are grateful for their exceptional work and generous contribution to open sou
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=hpcaitech/Open-Sora&type=Date)](https://star-history.com/#hpcaitech/Open-Sora&Date)
+
+
